@@ -1,0 +1,36 @@
+#playfield {
+  border-collapse: collapse;
+  margin: auto;
+}
+
+#playfield td {
+  border: 1px solid lightgray;
+  height: 20px;
+  width: 20px;
+}
+
+#playfield td:first-child {
+  border-left: 1px solid black;
+}
+
+#playfield td:last-child {
+  border-right: 1px solid black;
+}
+
+#playfield tr:first-child td {
+  border-top: 1px solid black;
+}
+
+#playfield tr:last-child td {
+  border-bottom: 1px solid black;
+}
+
+#playfield .snake {
+  background: green;
+  border: 1px solid green;
+}
+
+#playfield .apple {
+  background: red;
+  border: 1px solid red;
+}
