@@ -3,14 +3,6 @@ import { Position } from './types';
 export const COLUMNS = 10;
 export const ROWS = 10;
 
-export const SEPARATOR = ':';
-
-export const APP_ID = 'app';
-export const PLAYFIELD_ID = 'playfield';
-
-export const APPLE_CLASS = 'apple';
-export const SNAKE_CLASS = 'snake';
-
 export const POSITION_X = 0;
 export const POSITION_Y = 1;
 
