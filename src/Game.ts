@@ -32,33 +32,20 @@ export default class Game {
   }
 
   start() {
-    const snakePosition = this.snake.getPosition();
-    const applePosition = this.apple.getPosition();
-
-    this.playfield.renderField();
-    this.playfield.renderSnake(snakePosition);
-    this.playfield.renderApple(applePosition);
-
+    this.draw();
     this.activateControl();
     setTimeout(this.startMovement.bind(this), START_DELAY);
   }
 
   restart() {
     this.stopMovement();
-
-    this.playfield.removeSnake();
-    this.playfield.removeApple();
-
     this.snake.setPosition([SNAKE_START_POSITION]);
     this.snake.setDirection(SNAKE_START_DIRECTION);
 
     const snakePosition = this.snake.getPosition();
     this.apple.setPosition(Apple.createNewPosition(snakePosition, ROWS, COLUMNS));
 
-    const applePosition = this.apple.getPosition();
-
-    this.playfield.renderSnake(snakePosition);
-    this.playfield.renderApple(applePosition);
+    this.draw();
 
     setTimeout(this.startMovement.bind(this), START_DELAY);
   }
@@ -122,7 +109,7 @@ export default class Game {
 
     switch (snakeDirection) {
       case DIRECTION.RIGHT: {
-        this.playfield.removeSnake();
+        // this.playfield.removeSnake();
 
         const [headX, headY] = this.snake.getPosition()[SNAKE_HEAD];
         const nextY = headY + 1;
@@ -139,25 +126,25 @@ export default class Game {
         const wasAppleEaten = this.wasAppleEaten(nextHeadPosition);
 
         if (wasAppleEaten) {
-          this.playfield.removeApple();
+          // this.playfield.removeApple();
 
           nextSnakePosition = this.calculateNextSnakePosition(nextHeadPosition, wasAppleEaten);
 
           const nextApplePosition = Apple.createNewPosition(nextSnakePosition, ROWS, COLUMNS);
           this.apple.setPosition(nextApplePosition);
-          this.playfield.renderApple(nextApplePosition);
+          // this.playfield.renderApple(nextApplePosition);
         } else {
           nextSnakePosition = this.calculateNextSnakePosition(nextHeadPosition, wasAppleEaten);
         }
 
         this.snake.setPosition(nextSnakePosition);
-        this.playfield.renderSnake(nextSnakePosition);
+        // this.playfield.renderSnake(nextSnakePosition);
 
         break;
       }
 
       case DIRECTION.LEFT: {
-        this.playfield.removeSnake();
+        // this.playfield.removeSnake();
 
         const [headX, headY] = this.snake.getPosition()[SNAKE_HEAD];
         const nextY = headY - 1;
@@ -174,25 +161,25 @@ export default class Game {
         const wasAppleEaten = this.wasAppleEaten(nextHeadPosition);
 
         if (wasAppleEaten) {
-          this.playfield.removeApple();
+          // this.playfield.removeApple();
 
           nextSnakePosition = this.calculateNextSnakePosition(nextHeadPosition, wasAppleEaten);
 
           const nextApplePosition = Apple.createNewPosition(nextSnakePosition, ROWS, COLUMNS);
           this.apple.setPosition(nextApplePosition);
-          this.playfield.renderApple(nextApplePosition);
+          // this.playfield.renderApple(nextApplePosition);
         } else {
           nextSnakePosition = this.calculateNextSnakePosition(nextHeadPosition, wasAppleEaten);
         }
 
         this.snake.setPosition(nextSnakePosition);
-        this.playfield.renderSnake(nextSnakePosition);
+        // this.playfield.renderSnake(nextSnakePosition);
 
         break;
       }
 
       case DIRECTION.DOWN: {
-        this.playfield.removeSnake();
+        // this.playfield.removeSnake();
 
         const [headX, headY] = this.snake.getPosition()[SNAKE_HEAD];
         const nextX = headX + 1;
@@ -209,25 +196,25 @@ export default class Game {
         const wasAppleEaten = this.wasAppleEaten(nextHeadPosition);
 
         if (wasAppleEaten) {
-          this.playfield.removeApple();
+          // this.playfield.removeApple();
 
           nextSnakePosition = this.calculateNextSnakePosition(nextHeadPosition, wasAppleEaten);
 
           const nextApplePosition = Apple.createNewPosition(nextSnakePosition, ROWS, COLUMNS);
           this.apple.setPosition(nextApplePosition);
-          this.playfield.renderApple(nextApplePosition);
+          // this.playfield.renderApple(nextApplePosition);
         } else {
           nextSnakePosition = this.calculateNextSnakePosition(nextHeadPosition, wasAppleEaten);
         }
 
         this.snake.setPosition(nextSnakePosition);
-        this.playfield.renderSnake(nextSnakePosition);
+        // this.playfield.renderSnake(nextSnakePosition);
 
         break;
       }
 
       case DIRECTION.UP: {
-        this.playfield.removeSnake();
+        // this.playfield.removeSnake();
 
         const [headX, headY] = this.snake.getPosition()[SNAKE_HEAD];
         const nextX = headX - 1;
@@ -244,19 +231,19 @@ export default class Game {
         const wasAppleEaten = this.wasAppleEaten(nextHeadPosition);
 
         if (wasAppleEaten) {
-          this.playfield.removeApple();
+          // this.playfield.removeApple();
 
           nextSnakePosition = this.calculateNextSnakePosition(nextHeadPosition, wasAppleEaten);
 
           const nextApplePosition = Apple.createNewPosition(nextSnakePosition, ROWS, COLUMNS);
           this.apple.setPosition(nextApplePosition);
-          this.playfield.renderApple(nextApplePosition);
+          // this.playfield.renderApple(nextApplePosition);
         } else {
           nextSnakePosition = this.calculateNextSnakePosition(nextHeadPosition, wasAppleEaten);
         }
 
         this.snake.setPosition(nextSnakePosition);
-        this.playfield.renderSnake(nextSnakePosition);
+        // this.playfield.renderSnake(nextSnakePosition);
 
         break;
       }
@@ -265,6 +252,7 @@ export default class Game {
     }
 
     this.snake.setCanChangeDirection(true);
+    this.draw();
   }
 
   private isGameOver(nextHeadPosition: Position): boolean {
@@ -297,5 +285,12 @@ export default class Game {
     }
 
     return nextSnakePosition;
+  }
+
+  private draw() {
+    const snakePosition = this.snake.getPosition();
+    const applePosition = this.apple.getPosition();
+
+    this.playfield.draw(snakePosition, applePosition);
   }
 }
