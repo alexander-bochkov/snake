@@ -1,5 +1,5 @@
-import { POSITION_X, POSITION_Y } from '../constants';
-import type { Position, SnakePosition } from '../types';
+import { PLAYFIELD_SIZE, POSITION_X, POSITION_Y } from '../common/constants';
+import type { Position, SnakePosition } from '../common/types';
 import {
   APP_ID,
   BORDER_RADIUS,
@@ -11,7 +11,6 @@ import {
   FILL_GAP,
   FILL_SIZE,
   PLAYFIELD_ID,
-  PLAYFIELD_SIZE,
   STROKE_WIDTH,
 } from './constants';
 
@@ -30,7 +29,7 @@ export default class Playfield {
     app?.appendChild(playField);
   }
 
-  draw(snakePosition: SnakePosition, applePosition: Position) {
+  draw(snakePosition: SnakePosition, applePosition?: Position) {
     this.clearPlayfield();
     this.drawCells(snakePosition, applePosition);
   }
@@ -44,7 +43,7 @@ export default class Playfield {
     context.clearRect(0, 0, playField.width, playField.height);
   }
 
-  private drawCells(snakePosition: SnakePosition, applePosition: Position) {
+  private drawCells(snakePosition: SnakePosition, applePosition?: Position) {
     for (let row = 0; row < PLAYFIELD_SIZE; row += 1) {
       for (let column = 0; column < PLAYFIELD_SIZE; column += 1) {
         const cellType = this.getCellType(row, column, snakePosition, applePosition);
@@ -53,13 +52,14 @@ export default class Playfield {
     }
   }
 
-  private getCellType(row: number, column: number, snakePosition: SnakePosition, applePosition: Position): CELL_TYPE {
+  private getCellType(row: number, column: number, snakePosition: SnakePosition, applePosition?: Position): CELL_TYPE {
     if (this.isApple(row, column, applePosition)) return CELL_TYPE.APPLE;
     if (this.isSnakePart(row, column, snakePosition)) return CELL_TYPE.SNAKE_PART;
     return CELL_TYPE.GROUND;
   }
 
-  private isApple(row: number, column: number, applePosition: Position): boolean {
+  private isApple(row: number, column: number, applePosition?: Position): boolean {
+    if (!applePosition) return false;
     return applePosition[POSITION_X] === row && applePosition[POSITION_Y] === column;
   }
 

@@ -3,8 +3,6 @@ export const PLAYFIELD_ID = 'playfield';
 
 export const CANVAS_SIZE = '418';
 
-export const PLAYFIELD_SIZE = 10;
-
 export const BORDER_RADIUS = 2;
 
 export const CELL_GAP = 2;
