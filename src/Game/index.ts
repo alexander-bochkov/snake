@@ -1,10 +1,13 @@
 import Playfield from '../Playfield';
+import Score from '../Score';
 import { PLAYFIELD_SIZE, POSITION_X, POSITION_Y } from '../common/constants';
 import { Position, SnakePosition } from '../common/types';
 import { DIRECTION, KEYS, SNAKE_HEAD, SNAKE_START_DIRECTION, SNAKE_START_POSITION, STEP_INTERVAL } from './constants';
 
 export default class Game {
   private readonly playfield: Playfield;
+
+  private readonly score: Score;
 
   private canChangeDirection = true;
 
@@ -16,8 +19,9 @@ export default class Game {
 
   private prevTimeStamp = 0;
 
-  constructor(playfield: Playfield) {
+  constructor(playfield: Playfield, score: Score) {
     this.playfield = playfield;
+    this.score = score;
   }
 
   start() {
@@ -45,12 +49,15 @@ export default class Game {
 
     if (this.isGameOver(nextHeadPosition)) {
       this.setDefault();
+      this.score.reset();
       return;
     }
 
     if (this.wasAppleEaten(nextHeadPosition)) {
       this.snakePosition = this.calculateNextSnakePosition(nextHeadPosition, true);
       this.applePosition = this.hasFreeCells() ? this.createNewApplePosition(this.snakePosition) : undefined;
+
+      this.score.increase();
     } else {
       this.snakePosition = this.calculateNextSnakePosition(nextHeadPosition, false);
     }
