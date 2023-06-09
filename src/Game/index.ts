@@ -1,4 +1,5 @@
 import Playfield from '../Playfield';
+import Score from '../Score';
 import { PLAYFIELD_SIZE, POSITION_X, POSITION_Y } from '../common/constants';
 import { Position, SnakePosition } from '../common/types';
 import { DIRECTION, KEYS, SNAKE_HEAD, SNAKE_START_DIRECTION, SNAKE_START_POSITION, STEP_INTERVAL } from './constants';
@@ -6,18 +7,21 @@ import { DIRECTION, KEYS, SNAKE_HEAD, SNAKE_START_DIRECTION, SNAKE_START_POSITIO
 export default class Game {
   private readonly playfield: Playfield;
 
+  private readonly score: Score;
+
   private canChangeDirection = true;
 
   private snakeDirection: DIRECTION = SNAKE_START_DIRECTION;
 
   private snakePosition: SnakePosition = SNAKE_START_POSITION;
 
-  private applePosition?: Position;
+  private applePosition?: Position = this.createNewApplePosition(SNAKE_START_POSITION);
 
   private prevTimeStamp = 0;
 
-  constructor(playfield: Playfield) {
+  constructor(playfield: Playfield, score: Score) {
     this.playfield = playfield;
+    this.score = score;
   }
 
   start() {
@@ -27,9 +31,14 @@ export default class Game {
 
   private loop(timeStamp: number) {
     if (timeStamp - this.prevTimeStamp >= STEP_INTERVAL) {
-      this.prevTimeStamp = timeStamp;
-      this.update();
-      this.draw();
+      if (this.prevTimeStamp === 0) {
+        this.prevTimeStamp = timeStamp;
+        this.draw();
+      } else {
+        this.prevTimeStamp = timeStamp;
+        this.update();
+        this.draw();
+      }
     }
 
     requestAnimationFrame(this.loop.bind(this));
@@ -45,12 +54,15 @@ export default class Game {
 
     if (this.isGameOver(nextHeadPosition)) {
       this.setDefault();
+      this.score.reset();
       return;
     }
 
     if (this.wasAppleEaten(nextHeadPosition)) {
       this.snakePosition = this.calculateNextSnakePosition(nextHeadPosition, true);
       this.applePosition = this.hasFreeCells() ? this.createNewApplePosition(this.snakePosition) : undefined;
+
+      this.score.increase();
     } else {
       this.snakePosition = this.calculateNextSnakePosition(nextHeadPosition, false);
     }
@@ -126,7 +138,7 @@ export default class Game {
     this.canChangeDirection = true;
     this.snakeDirection = SNAKE_START_DIRECTION;
     this.snakePosition = SNAKE_START_POSITION;
-    this.applePosition = undefined;
+    this.applePosition = this.createNewApplePosition(SNAKE_START_POSITION);
   }
 
   private draw() {

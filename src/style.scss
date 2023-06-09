@@ -1,10 +1,41 @@
+@font-face {
+  font-family: Monofett;
+  font-style: normal;
+  font-weight: 100 900;
+  src: url('./assets/Monofett.ttf') format('truetype');
+}
+
 body {
   background-color: #95bc8d;
   margin: 0;
 }
 
 #app {
+  align-items: center;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   margin-top: 20px;
+}
+
+#playfield {
+  height: 418px;
+  width: 418px;
+}
+
+.score-layout {
+  display: flex;
+  font-family: Monofett, Arial, Helvetica, sans-serif;
+  font-size: 40px;
+  justify-content: space-between;
+  user-select: none;
+  width: 418px;
+}
+
+.score {
+  color: #364a2f;
+}
+
+.best-score {
+  color: #9b4534;
+  width: 185px;
 }
