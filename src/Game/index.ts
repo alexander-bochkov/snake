@@ -15,7 +15,7 @@ export default class Game {
 
   private snakePosition: SnakePosition = SNAKE_START_POSITION;
 
-  private applePosition?: Position;
+  private applePosition?: Position = this.createNewApplePosition(SNAKE_START_POSITION);
 
   private prevTimeStamp = 0;
 
@@ -31,9 +31,14 @@ export default class Game {
 
   private loop(timeStamp: number) {
     if (timeStamp - this.prevTimeStamp >= STEP_INTERVAL) {
-      this.prevTimeStamp = timeStamp;
-      this.update();
-      this.draw();
+      if (this.prevTimeStamp === 0) {
+        this.prevTimeStamp = timeStamp;
+        this.draw();
+      } else {
+        this.prevTimeStamp = timeStamp;
+        this.update();
+        this.draw();
+      }
     }
 
     requestAnimationFrame(this.loop.bind(this));
@@ -133,7 +138,7 @@ export default class Game {
     this.canChangeDirection = true;
     this.snakeDirection = SNAKE_START_DIRECTION;
     this.snakePosition = SNAKE_START_POSITION;
-    this.applePosition = undefined;
+    this.applePosition = this.createNewApplePosition(SNAKE_START_POSITION);
   }
 
   private draw() {
