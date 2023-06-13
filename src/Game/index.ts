@@ -9,9 +9,9 @@ export default class Game {
 
   private readonly score: Score;
 
-  private canChangeDirection = true;
-
   private snakeDirection: DIRECTION = SNAKE_START_DIRECTION;
+
+  private nextSnakeDirection: DIRECTION | null = null;
 
   private snakePosition: SnakePosition = SNAKE_START_POSITION;
 
@@ -67,11 +67,14 @@ export default class Game {
       this.snakePosition = this.calculateNextSnakePosition(nextHeadPosition, false);
     }
 
-    this.canChangeDirection = true;
+    if (this.nextSnakeDirection) {
+      this.snakeDirection = this.nextSnakeDirection;
+      this.nextSnakeDirection = null;
+    }
   }
 
   private getNextHeadPosition(): Position {
-    switch (this.snakeDirection) {
+    switch (this.nextSnakeDirection || this.snakeDirection) {
       case DIRECTION.UP: {
         const [headX, headY] = this.snakePosition[SNAKE_HEAD];
         const nextX = headX - 1;
@@ -135,8 +138,8 @@ export default class Game {
   }
 
   private setDefault() {
-    this.canChangeDirection = true;
     this.snakeDirection = SNAKE_START_DIRECTION;
+    this.nextSnakeDirection = null;
     this.snakePosition = SNAKE_START_POSITION;
     this.applePosition = this.createNewApplePosition(SNAKE_START_POSITION);
   }
@@ -175,30 +178,18 @@ export default class Game {
   }
 
   private turnUp() {
-    if (this.canChangeDirection && this.snakeDirection !== DIRECTION.UP && this.snakeDirection !== DIRECTION.DOWN) {
-      this.snakeDirection = DIRECTION.UP;
-      this.canChangeDirection = false;
-    }
+    if (this.snakeDirection !== DIRECTION.DOWN) this.nextSnakeDirection = DIRECTION.UP;
   }
 
   private turnDown() {
-    if (this.canChangeDirection && this.snakeDirection !== DIRECTION.DOWN && this.snakeDirection !== DIRECTION.UP) {
-      this.snakeDirection = DIRECTION.DOWN;
-      this.canChangeDirection = false;
-    }
+    if (this.snakeDirection !== DIRECTION.UP) this.nextSnakeDirection = DIRECTION.DOWN;
   }
 
   private turnLeft() {
-    if (this.canChangeDirection && this.snakeDirection !== DIRECTION.LEFT && this.snakeDirection !== DIRECTION.RIGHT) {
-      this.snakeDirection = DIRECTION.LEFT;
-      this.canChangeDirection = false;
-    }
+    if (this.snakeDirection !== DIRECTION.RIGHT) this.nextSnakeDirection = DIRECTION.LEFT;
   }
 
   private turnRight() {
-    if (this.canChangeDirection && this.snakeDirection !== DIRECTION.RIGHT && this.snakeDirection !== DIRECTION.LEFT) {
-      this.snakeDirection = DIRECTION.RIGHT;
-      this.canChangeDirection = false;
-    }
+    if (this.snakeDirection !== DIRECTION.LEFT) this.nextSnakeDirection = DIRECTION.RIGHT;
   }
 }

@@ -1,6 +1,6 @@
 import type { SnakePosition } from '../common/types';
 
-export const STEP_INTERVAL = 600;
+export const STEP_INTERVAL = 400;
 
 export const SNAKE_HEAD = 0;
 
